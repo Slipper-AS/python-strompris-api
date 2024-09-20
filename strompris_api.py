@@ -3,6 +3,11 @@ import re
 from dotenv import load_dotenv
 import os
 
+from models.association import Association
+from models.company import Company
+from models.product import Product
+from models.sales_network import SalesNetwork
+
 load_dotenv()
 
 BASE_URL = 'https://strom-api.forbrukerradet.no'
@@ -47,7 +52,37 @@ def get_products(date):
     response = requests.get(f'{BASE_URL}/feed/{date}', headers=headers)
 
     if response.status_code == 200:
-        return response.json()
+        companies_data  = response.json()
+        companies = []
+
+        for company_data in companies_data:
+            products = []
+
+            for product_data in company_data.get('products', []):
+                sales_networks = [SalesNetwork(**sales_network) for sales_network in product_data.get('salesNetworks', [])]
+                associations = [Association(**association) for association in product_data.get('associations', [])]
+
+                filtered_product_data = {k: v for k, v in product_data.items() if
+                                        k not in ['salesNetworks', 'associations']}
+
+                product = Product(
+                    **filtered_product_data,
+                    salesNetworks=sales_networks,
+                    associations=associations
+                )
+                products.append(product)
+
+            company = Company(
+                id=company_data['id'],
+                name=company_data['name'],
+                organizationNumber=company_data['organizationNumber'],
+                pricelistUrl=company_data['pricelistUrl'],
+                products=products
+            )
+            companies.append(company)
+
+        return companies
+
     else:
         print(f"Error Details: {response.text}")
         raise Exception(f"Failed to fetch data: {response.status_code}")
