@@ -1,12 +1,12 @@
 import requests
 import re
 from dotenv import load_dotenv
-import os
+import os, sys
 
-from models.association import Association
-from models.company import Company
-from models.product import Product
-from models.sales_network import SalesNetwork
+from .models.association import Association
+from .models.company import Company
+from .models.product import Product
+from .models.sales_network import SalesNetwork
 
 load_dotenv()
 
@@ -38,8 +38,8 @@ def get_products(date):
     if not is_valid_date(date):
         raise ValueError("Date must be in yyyy-MM-dd format")
 
-    client_id = os.getenv('CLIENT_ID')
-    client_secret = os.getenv('CLIENT_SECRET')
+    client_id = os.getenv('STROMPRIS_CLIENT_ID')
+    client_secret = os.getenv('STROMPRIS_CLIENT_SECRET')
 
     access_token = get_access_token(client_id, client_secret)
 
@@ -49,6 +49,7 @@ def get_products(date):
         'Content-Type': 'application/json',
     }
 
+    print(f'{BASE_URL}/feed/{date}')
     response = requests.get(f'{BASE_URL}/feed/{date}', headers=headers)
 
     if response.status_code == 200:
