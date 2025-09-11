@@ -49,8 +49,10 @@ def get_products(date, expired=False):
         'Content-Type': 'application/json',
     }
 
-    print(f'{BASE_URL}/feed/{date}?expired={expired}')  # Include expired flag in the URL
-    response = requests.get(f'{BASE_URL}/feed/{date}?expired={expired}', headers=headers)
+    expired_flag = 'true' if expired else 'false'
+
+    print(f'{BASE_URL}/feed/{date}?expired={expired_flag}')  # Include expired flag in the URL
+    response = requests.get(f'{BASE_URL}/feed/{date}?expired={expired_flag}', headers=headers)
 
     if response.status_code == 200:
         companies_data  = response.json()
