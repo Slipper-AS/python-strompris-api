@@ -34,7 +34,7 @@ def get_access_token(client_id, client_secret):
         raise Exception(f"Failed to obtain token: {response.status_code} {response.text}")
 
 
-def get_products(date):
+def get_products(date, expired=False):
     if not is_valid_date(date):
         raise ValueError("Date must be in yyyy-MM-dd format")
 
@@ -49,8 +49,8 @@ def get_products(date):
         'Content-Type': 'application/json',
     }
 
-    print(f'{BASE_URL}/feed/{date}')
-    response = requests.get(f'{BASE_URL}/feed/{date}', headers=headers)
+    print(f'{BASE_URL}/feed/{date}?expired={expired}')  # Include expired flag in the URL
+    response = requests.get(f'{BASE_URL}/feed/{date}?expired={expired}', headers=headers)
 
     if response.status_code == 200:
         companies_data  = response.json()
