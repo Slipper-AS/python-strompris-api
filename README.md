@@ -22,8 +22,8 @@ pip install -r requirements.txt
 - Create .env file from .env.example.
 - Add variables in .env.
     ```
-    CLIENT_ID=clientId
-    CLIENT_SECRET=clientSecret
+    STROMPRIS_CLIENT_ID=clientId
+    STROMPRIS_CLIENT_SECRET=clientSecret
     ```
 
 ## Running Test
