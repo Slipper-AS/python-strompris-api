@@ -1,8 +1,8 @@
 from typing import List, Optional
 from dataclasses import dataclass, field
 
-from models.association import Association
-from models.sales_network import SalesNetwork
+from .association import Association
+from .sales_network import SalesNetwork
 
 
 @dataclass
