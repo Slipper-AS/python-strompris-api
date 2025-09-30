@@ -65,8 +65,11 @@ def get_products(date, expired=False):
                 sales_networks = [SalesNetwork(**sales_network) for sales_network in product_data.get('salesNetworks', [])]
                 associations = [Association(**association) for association in product_data.get('associations', [])]
 
+                print(product_data.items())
                 filtered_product_data = {k: v for k, v in product_data.items() if
-                                        k not in ['salesNetworks', 'associations']}
+                                        k not in ['salesNetworks', 'associations',
+                                                  'linkedProducts']}
+                print(filtered_product_data)
 
                 product = Product(
                     **filtered_product_data,
