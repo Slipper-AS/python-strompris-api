@@ -37,6 +37,6 @@ class Product:
     updatedAt: str
     deletedAt: Optional[str]
     vatExemption: bool
+    linkedProduct: int
     salesNetworks: List[SalesNetwork] = field(default_factory=list)
     associations: List[Association] = field(default_factory=list)
-    linkedProduct: int
