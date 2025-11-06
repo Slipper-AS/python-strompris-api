@@ -39,3 +39,4 @@ class Product:
     vatExemption: bool
     salesNetworks: List[SalesNetwork] = field(default_factory=list)
     associations: List[Association] = field(default_factory=list)
+    linkedProduct: int
