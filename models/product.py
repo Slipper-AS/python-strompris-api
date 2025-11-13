@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 
 from .association import Association
 from .sales_network import SalesNetwork
-
+from datetime import datetime
 
 @dataclass
 class Product:
@@ -36,6 +36,7 @@ class Product:
     createdAt: str
     updatedAt: str
     deletedAt: Optional[str]
+    endDate: datetime
     vatExemption: bool
     linkedProduct: int
     salesNetworks: List[SalesNetwork] = field(default_factory=list)
