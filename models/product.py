@@ -43,6 +43,7 @@ class Product:
     endDate: datetime
     vatExemption: bool
     linkedProduct: int
+    canBeCombinedWithPlus: bool
     salesNetworks: List[SalesNetwork] = field(default_factory=list)
     associations: List[Association] = field(default_factory=list)
 
