@@ -44,6 +44,7 @@ class Product:
     vatExemption: bool
     linkedProduct: int
     canBeCombinedWithPlus: bool
+    solarAccount: bool
     salesNetworks: List[SalesNetwork] = field(default_factory=list)
     associations: List[Association] = field(default_factory=list)
 
