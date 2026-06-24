@@ -2,11 +2,12 @@ import requests
 import re
 from dotenv import load_dotenv
 import os, sys
-
+from dataclasses import dataclass, fields
 from .models.association import Association
 from .models.company import Company
 from .models.product import Product
 from .models.sales_network import SalesNetwork
+from common.bot import send_slack_message_to_api_messages_channel
 
 load_dotenv()
 
@@ -67,6 +68,12 @@ def get_products(date, expired=False):
 
                 filtered_product_data = {k: v for k, v in product_data.items() if
                                         k not in ['salesNetworks', 'associations']}
+                valid_fields = {field.name for field in fields(Product)}
+                not_valid = {k: v for k, v in product_data.items() if k not in valid_fields}
+                if not_valid:
+                    send_slack_message_to_api_messages_channel(f"Unknown product fields from strompris: {list(not_valid.keys())}")
+                filtered_product_data = {k: v for k, v in filtered_product_data.items() if
+                                        k in valid_fields}
                 product = Product(
                     **filtered_product_data,
                     salesNetworks=sales_networks,
