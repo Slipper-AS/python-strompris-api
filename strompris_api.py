@@ -7,7 +7,9 @@ from .models.association import Association
 from .models.company import Company
 from .models.product import Product
 from .models.sales_network import SalesNetwork
+# for use outside slipper, comment out the below. 
 from common.bot import send_slack_message_to_api_messages_channel
+
 
 load_dotenv()
 
@@ -54,8 +56,8 @@ def get_products(date, expired=False):
 
     print(f'{BASE_URL}/feed/{date}?expired={expired_flag}')  # Include expired flag in the URL
     response = requests.get(f'{BASE_URL}/feed/{date}?expired={expired_flag}', headers=headers)
-
     if response.status_code == 200:
+        not_valid = set()
         companies_data  = response.json()
         companies = []
 
@@ -69,9 +71,9 @@ def get_products(date, expired=False):
                 filtered_product_data = {k: v for k, v in product_data.items() if
                                         k not in ['salesNetworks', 'associations']}
                 valid_fields = {field.name for field in fields(Product)}
-                not_valid = {k: v for k, v in product_data.items() if k not in valid_fields}
-                if not_valid:
-                    send_slack_message_to_api_messages_channel(f"Unknown product fields from strompris: {list(not_valid.keys())}")
+                for k, v in product_data.items() :
+                    if k not in valid_fields:
+                        not_valid.add(k)
                 filtered_product_data = {k: v for k, v in filtered_product_data.items() if
                                         k in valid_fields}
                 product = Product(
@@ -90,6 +92,8 @@ def get_products(date, expired=False):
             )
             companies.append(company)
 
+        if len(not_valid) > 0:
+            send_slack_message_to_api_messages_channel(f"Unknown product fields from strompris: {list(not_valid)}")
         return companies
 
     else:
