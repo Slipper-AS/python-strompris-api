@@ -23,6 +23,7 @@ class Product:
     productType: str
     paymentType: str
     monthlyFee: float
+    plusMonthlyFee: float
     addonPrice: float
     elCertificatePrice: float
     maxKwhPerYear: float
